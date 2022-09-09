@@ -27,12 +27,15 @@ packages = [
 include = ["setup.cfg"]
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.8,<4.0"
 Django = ">=3.2"
 
 [tool.poetry.dev-dependencies]
 black = {version = ">=21.7b0", python = ">=3.6.2"}
 flake8 = "^3.9.2"
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.10.1"
 
 [tool.black]
 line-length = 119
