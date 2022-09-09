@@ -25,12 +25,12 @@ You can use Django Admin to view the saved Person objects and add a first name i
 
 Note that the Person model uses Address field with `null=True`.
 
-By default, `django-address` uses Cascade delete on AddressField. 
+By default, `django-address` uses Cascade delete on AddressField.
 
-This means if you for some reason delete an Address that is related to a Person or some other 
+This means if you for some reason delete an Address that is related to a Person or some other
 model, it will also delete the Person.
 
-By setting `null=True`, deleting the Address associated with a Person will keep the Person 
+By setting `null=True`, deleting the Address associated with a Person will keep the Person
 object instance and set `address` to null.
 
 # Setup
@@ -49,13 +49,15 @@ The first two are used by Docker to ensure any files created are owned by your c
 make your Google Maps API key available to the example site. Instructions for setting up an API key here: [Google Maps
 API Key]. Please note that this requires the set up of a billing account with Google.
 
-## Enable (activate) required Google Maps services for the project your key belongs to 
+## Enable (activate) required Google Maps services for the project your key belongs to
 
 This is hidden under Google Cloud Platform's console menu, under **Other Google Solutions** > **Google Maps** >
-**APIs**. ([screenshot](https://user-images.githubusercontent.com/1409710/81484071-9d495580-91f7-11ea-891e-850fd5a225de.png))
-   * Google Maps _Javascript API_ 
-   * Google Maps _Places API_ 
-   
+**APIs**
+. ([screenshot](https://user-images.githubusercontent.com/1409710/81484071-9d495580-91f7-11ea-891e-850fd5a225de.png))
+
+* Google Maps _Javascript API_
+* Google Maps _Places API_
+
 ## Launch the server
 
 To run the example site, simply run:
@@ -71,18 +73,26 @@ This will take care of launching a database, the server, and migrating the datab
 ```bash
 docker-compose run --rm server python manage.py createsuperuser
 ```
-   
+
 # The Project
 
 The page shows a simple form entry field.
 
 ### Troubleshooting Google Maps
 
-Check the browser console on the page for javascript errors. ([Screenshot of an error](https://user-images.githubusercontent.com/1409710/81484063-90c4fd00-91f7-11ea-8833-80a346c77f89.png))
-   * `ApiTargetBlockedMapError`: Your API key [needs authorization](https://developers.google.com/maps/documentation/javascript/error-messages#api-target-blocked-map-error) to use the above services.
-   * `ApiNotActivatedMapError`: Your API key [needs Google Maps services](https://developers.google.com/maps/documentation/javascript/error-messages#api-target-blocked-map-error) to use the above services.
-   
-   ***NOTE:** There is up to a several minute delay in making changes to project and api key settings. New keys can also take several minutes to be recognized. 
+Check the browser console on the page for javascript
+errors. ([Screenshot of an error](https://user-images.githubusercontent.com/1409710/81484063-90c4fd00-91f7-11ea-8833-80a346c77f89.png))
+
+* `ApiTargetBlockedMapError`: Your API
+  key [needs authorization](https://developers.google.com/maps/documentation/javascript/error-messages#api-target-blocked-map-error)
+  to use the above services.
+* `ApiNotActivatedMapError`: Your API
+  key [needs Google Maps services](https://developers.google.com/maps/documentation/javascript/error-messages#api-target-blocked-map-error)
+  to use the above services.
+
+***NOTE:** There is up to a several minute delay in making changes to project and api key settings. New keys can also
+take several minutes to be recognized.
 
 [Google Maps API Key]: https://developers.google.com/maps/documentation/javascript/get-api-key
+
 [settings.py]: example_site/settings.py
