@@ -1,12 +1,15 @@
 [tool.poetry]
-name = "django-address"
-version = "0.2.8"
-description = "A django application for describing addresses."
-authors = ["Luke Hodkinson <furious.luke@gmail.com>"]
+name = "django-address-municipality"
+version = "0.3.0"
+description = """
+A django application for describing addresses. A fork of https://github.com/furious-luke/django-address that adds
+another level of administrative boundaries to addresses (Municipalities) corresponding to admin_level 6 in Google Places
+and OpenStreetMap data."""
+authors = ["Luke Hodkinson <furious.luke@gmail.com>", "David MacKinnon <blaedd@gmail.com>"]
 license = "BSD"
 readme = "README.md"
-homepage = "https://github.com/furious-luke/django-address"
-repository = "https://github.com/furious-luke/django-address"
+homepage = "https://github.com/blaedd/django-address"
+repository = "https://github.com/blaedd/django-address"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Framework :: Django",

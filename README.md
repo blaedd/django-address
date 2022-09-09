@@ -8,6 +8,11 @@
 
 Django Address is a set of models and methods for working with postal addresses.
 
+This is a fork from the [original](https://github.com/furious-luke/django-address) that adds Municipality as a level
+between State and Locality. In Australia these correspond to Local Government Areas (LGAs) but admin_level 6 in Google
+Places API and OpenStreetMap data is used in many countries. While not useful for postal addressing, it is useful to
+group nearby addresses for other purposes.
+
 # Requirements
 
 * Python (3.8, 3.9, 3.10)
@@ -22,7 +27,7 @@ instructions, [view the Readme for the example site](https://github.com/furious-
 included with this package.
 
 ```bash
-pip install django-address
+pip install django-address-municipality
 ```
 
 Then, add `address` to your `INSTALLED_APPS` list in `settings.py`:
