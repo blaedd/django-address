@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 
-from address.models import Country, State, Locality, Address
+from address.models import Country, State, Locality, Address, Municipality
 
 
 class UnidentifiedListFilter(SimpleListFilter):
@@ -35,3 +35,8 @@ class LocalityAdmin(admin.ModelAdmin):
 class AddressAdmin(admin.ModelAdmin):
     search_fields = ("street_number", "route", "raw")
     list_filter = (UnidentifiedListFilter,)
+
+
+@admin.register(Municipality)
+class MunicipalityAdmin(admin.ModelAdmin):
+    search_fields = ("name", "state")

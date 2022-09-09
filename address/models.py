@@ -2,17 +2,13 @@ import logging
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.conf import settings
 
-try:
-    from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
-except ImportError:
-    from django.db.models.fields.related import (
-        ReverseSingleRelatedObjectDescriptor as ForwardManyToOneDescriptor,
-    )
+from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["Country", "State", "Locality", "Address", "AddressField"]
+__all__ = ["Address", "AddressField", "Country", "Locality", "Municipality", "State"]
 
 
 class InconsistentDictError(Exception):
@@ -58,7 +54,7 @@ def _to_python(value):
         country_obj = Country.objects.get(name=country)
     except Country.DoesNotExist:
         if country:
-            if len(country_code) > Country._meta.get_field("code").max_length:
+            if len(country_code) > Country.code.field.max_length:
                 if country_code != country:
                     raise ValueError("Invalid country code (too long): %s" % country_code)
                 country_code = ""
@@ -71,7 +67,7 @@ def _to_python(value):
         state_obj = State.objects.get(name=state, country=country_obj)
     except State.DoesNotExist:
         if state:
-            if len(state_code) > State._meta.get_field("code").max_length:
+            if len(state_code) > State.code.field.max_length:
                 if state_code != state:
                     raise ValueError("Invalid state code (too long): %s" % state_code)
                 state_code = ""
@@ -89,12 +85,13 @@ def _to_python(value):
 
     # Handle the locality.
     try:
-        locality_obj = Locality.objects.get(name=locality, postal_code=postal_code, state=state_obj,
-                                            municipality=municipality_obj)
+        locality_obj = Locality.objects.get(name=locality, postal_code=postal_code, state=state_obj)
+
     except Locality.DoesNotExist:
         if locality:
-            locality_obj = Locality.objects.create(name=locality, postal_code=postal_code, state=state_obj,
-                                                   municipality=municipality_obj)
+            locality_obj = Locality.objects.create(
+                name=locality, postal_code=postal_code, state=state_obj, municipality=municipality_obj
+            )
         else:
             locality_obj = None
 
@@ -210,9 +207,10 @@ class State(models.Model):
 # A municipality (local government area)
 ##
 
+
 class Municipality(models.Model):
-    name = models.CharField(max_length=165)
-    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='municipalities')
+    name = models.CharField(max_length=165, blank=True)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="municipalities")
 
     class Meta:
         verbose_name_plural = "Municipalities"
@@ -220,7 +218,10 @@ class Municipality(models.Model):
         ordering = ("state", "name")
 
     def __str__(self):
-        return f"{self.name}, {self.state}"
+        if self.name:
+            return f"{self.name}, {self.state}"
+        else:
+            return self.state.name
 
 
 ##
@@ -232,25 +233,29 @@ class Locality(models.Model):
     name = models.CharField(max_length=165, blank=True)
     postal_code = models.CharField(max_length=10, blank=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="localities")
-    municipality = models.ForeignKey(Municipality, on_delete=models.SET_NULL, related_name="localities", blank=True)
+    municipality = models.ForeignKey(
+        Municipality, on_delete=models.SET_NULL, related_name="localities", blank=True, null=True
+    )
 
     class Meta:
         verbose_name_plural = "Localities"
         unique_together = ("name", "postal_code", "state")
-        ordering = ("state", "municipality", "name")
+        ordering = ("state", "name")
 
     def __str__(self):
-        txt = "%s" % self.name
-        state = self.state.to_str() if self.state else ""
-        if txt and state:
-            txt += ", "
-        txt += state
-        if self.postal_code:
-            txt += " %s" % self.postal_code
-        cntry = "%s" % (self.state.country if self.state and self.state.country else "")
-        if cntry:
-            txt += ", %s" % cntry
-        return txt
+        parts = []
+        if self.name:
+            parts.append(self.name)
+        if self.municipality and self.municipality.name:
+            parts.append(self.municipality.name)
+        if self.state:
+            if self.postal_code:
+                parts.append(f"{self.state.to_str()} {self.postal_code}")
+            else:
+                parts.append(self.state.to_str())
+        if self.state and self.state.country:
+            parts.append(str(self.state.country))
+        return ", ".join(parts)
 
 
 ##
