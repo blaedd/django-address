@@ -26,6 +26,7 @@ class AddressWidget(forms.TextInput):
         ("street_number", "street_number"),
         ("state", "administrative_area_level_1"),
         ("state_code", "administrative_area_level_1_short"),
+        ("municipality", "administrative_area_level_2"),
         ("formatted", "formatted_address"),
         ("latitude", "lat"),
         ("longitude", "lng"),

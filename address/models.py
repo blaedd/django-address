@@ -24,6 +24,7 @@ def _to_python(value):
     country = value.get("country", "")
     country_code = value.get("country_code", "")
     state = value.get("state", "")
+    municipality = value.get("municipality", "")
     state_code = value.get("state_code", "")
     locality = value.get("locality", "")
     sublocality = value.get("sublocality", "")
@@ -78,12 +79,22 @@ def _to_python(value):
         else:
             state_obj = None
 
+    try:
+        municipality_obj = Municipality.objects.get(name=municipality, state=state_obj)
+    except Municipality.DoesNotExist:
+        if municipality:
+            municipality_obj = Municipality.objects.create(name=municipality, state=state_obj)
+        else:
+            municipality_obj = None
+
     # Handle the locality.
     try:
-        locality_obj = Locality.objects.get(name=locality, postal_code=postal_code, state=state_obj)
+        locality_obj = Locality.objects.get(name=locality, postal_code=postal_code, state=state_obj,
+                                            municipality=municipality_obj)
     except Locality.DoesNotExist:
         if locality:
-            locality_obj = Locality.objects.create(name=locality, postal_code=postal_code, state=state_obj)
+            locality_obj = Locality.objects.create(name=locality, postal_code=postal_code, state=state_obj,
+                                                   municipality=municipality_obj)
         else:
             locality_obj = None
 
@@ -121,7 +132,6 @@ def _to_python(value):
 
 
 def to_python(value):
-
     # Keep `None`s.
     if value is None:
         return None
@@ -197,6 +207,23 @@ class State(models.Model):
 
 
 ##
+# A municipality (local government area)
+##
+
+class Municipality(models.Model):
+    name = models.CharField(max_length=165)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='municipalities')
+
+    class Meta:
+        verbose_name_plural = "Municipalities"
+        unique_together = ("name", "state")
+        ordering = ("state", "name")
+
+    def __str__(self):
+        return f"{self.name}, {self.state}"
+
+
+##
 # A locality (suburb).
 ##
 
@@ -205,11 +232,12 @@ class Locality(models.Model):
     name = models.CharField(max_length=165, blank=True)
     postal_code = models.CharField(max_length=10, blank=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name="localities")
+    municipality = models.ForeignKey(Municipality, on_delete=models.SET_NULL, related_name="localities", blank=True)
 
     class Meta:
         verbose_name_plural = "Localities"
         unique_together = ("name", "postal_code", "state")
-        ordering = ("state", "name")
+        ordering = ("state", "municipality", "name")
 
     def __str__(self):
         txt = "%s" % self.name
@@ -290,6 +318,8 @@ class Address(models.Model):
                 if self.locality.state.country:
                     ad["country"] = self.locality.state.country.name
                     ad["country_code"] = self.locality.state.country.code
+                if self.locality.municipality:
+                    ad["municipality"] = self.locality.municipality.name
         return ad
 
 

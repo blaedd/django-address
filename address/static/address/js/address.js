@@ -18,6 +18,7 @@ $(function () {
 					'street_number',
 					'state',
 					'state_code',
+					'municipality',
 					'formatted',
 					'latitude',
 					'longitude',
