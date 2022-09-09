@@ -1,0 +1,185 @@
+[
+  {
+    "model": "address.country",
+    "pk": 1,
+    "fields": {
+      "name": "Australia",
+      "code": "AU"
+    }
+  },
+  {
+    "model": "address.country",
+    "pk": 2,
+    "fields": {
+      "name": "Belgium",
+      "code": "BE"
+    }
+  },
+  {
+    "model": "address.country",
+    "pk": 3,
+    "fields": {
+      "name": "New Zealand",
+      "code": "NZ"
+    }
+  },
+  {
+    "model": "address.country",
+    "pk": 4,
+    "fields": {
+      "name": "United Kingdom",
+      "code": "UK"
+    }
+  },
+  {
+    "model": "address.state",
+    "pk": 1,
+    "fields": {
+      "name": "Victoria",
+      "code": "VIC",
+      "country": 1
+    }
+  },
+  {
+    "model": "address.state",
+    "pk": 2,
+    "fields": {
+      "name": "Queensland",
+      "country": 1
+    }
+  },
+  {
+    "model": "address.state",
+    "pk": 3,
+    "fields": {
+      "name": "Tasmania",
+      "code": "TAS",
+      "country": 1
+    }
+  },
+  {
+    "model": "address.state",
+    "pk": 4,
+    "fields": {
+      "name": "",
+      "code": "",
+      "country": 1
+    }
+  },
+  {
+    "model": "address.state",
+    "pk": 5,
+    "fields": {
+      "name": "Victoria",
+      "code": "VIC",
+      "country": 4
+    }
+  },
+  {
+    "model": "address.state",
+    "pk": 6,
+    "fields": {
+      "name": "Oost-Vlaanderen",
+      "code": "VOV",
+      "country": 2
+    }
+  },
+  {
+    "model": "address.municipality",
+    "pk": 1,
+    "fields": {
+      "name": "City of Darebin",
+      "state": 1
+    }
+  },
+  {
+    "model": "address.municipality",
+    "pk": 2,
+    "fields": {
+      "name": "City of Melbourne",
+      "state": 1
+    }
+  },
+  {
+    "model": "address.municipality",
+    "pk": 3,
+    "fields": {
+      "name": "City of Yarra",
+      "state": 1
+    }
+  },
+  {
+    "model": "address.municipality",
+    "pk": 4,
+    "fields": {
+      "name": "",
+      "state": 1
+    }
+  },
+  {
+    "model": "address.municipality",
+    "pk": 5,
+    "fields": {
+      "name": "",
+      "state": 6
+    }
+  },
+  {
+    "model": "address.municipality",
+    "pk": 6,
+    "fields": {
+      "name": "Gold Coast",
+      "state": 2
+    }
+  },
+  {
+    "model": "address.locality",
+    "pk": 1,
+    "fields": {
+      "name": "Northcote",
+      "postal_code": "3070",
+      "state": 1,
+      "municipality": 1
+    }
+  },
+  {
+    "model": "address.locality",
+    "pk": 2,
+    "fields": {
+      "name": "Melbourne",
+      "postal_code": "3000",
+      "state": 1,
+      "municipality": 2
+    }
+  },
+  {
+    "model": "address.locality",
+    "pk": 3,
+    "fields": {
+      "name": "Fitzroy",
+      "postal_code": "",
+      "state": 1,
+      "municipality": 3
+    }
+  },
+  {
+    "model": "address.locality",
+    "pk": 4,
+    "fields": {
+      "name": "",
+      "postal_code": "",
+      "state": 1,
+      "municipality": 4
+    }
+  },
+  {
+    "model": "address.locality",
+    "pk": 5,
+    "fields": {
+      "name": "Melbourne",
+      "postal_code": "3000",
+      "state": 5,
+      "municipality": null
+    }
+  }
+]
