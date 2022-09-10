@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-address-municipality"
-version = "0.3.0"
+version = "0.3.1"
 description = "A django application for describing addresses, with Municipality support"
 authors = ["Luke Hodkinson <furious.luke@gmail.com>", "David MacKinnon <blaedd@gmail.com>"]
 license = "BSD"
