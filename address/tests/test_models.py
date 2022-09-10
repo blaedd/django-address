@@ -1,6 +1,6 @@
-from django.test import TestCase
-from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+from django.test import TestCase
 
 from address.models import Country, State, Locality, Address, AddressField, Municipality
 from address.models import to_python
@@ -96,9 +96,10 @@ class LocalityTestCase(AddressModelTestCase):
         self.assertEqual(qs[4].name, "Melbourne")
 
     def test_unicode(self):
-        self.assertEqual(str(self.au_vic_mel), "Melbourne, City of Melbourne, Victoria 3000, Australia")
-        self.assertEqual(str(self.au_vic_ftz), "Fitzroy, City of Yarra, Victoria, Australia")
-        self.assertEqual(str(self.au_vic_empty), "Victoria, Australia")
+        with self.settings(ADDRESS_PRINT_MUNICIPALITY=True):
+            self.assertEqual(str(self.au_vic_mel), "Melbourne, City of Melbourne, Victoria 3000, Australia")
+            self.assertEqual(str(self.au_vic_ftz), "Fitzroy, City of Yarra, Victoria, Australia")
+            self.assertEqual(str(self.au_vic_empty), "Victoria, Australia")
 
 
 class AddressTestCase(AddressModelTestCase):
@@ -144,8 +145,11 @@ class AddressTestCase(AddressModelTestCase):
     #     )
 
     def test_unicode(self):
-        self.assertEqual(str(self.ad1), "1 Some Street, Melbourne, City of Melbourne, Victoria 3000, Australia")
-        self.assertEqual(str(self.ad_empty), "Northcote, City of Darebin, Victoria 3070, Australia")
+        with self.settings(ADDRESS_PRINT_MUNICIPALITY=True):
+            self.assertEqual(str(self.ad1), "1 Some Street, Melbourne, City of Melbourne, Victoria 3000, Australia")
+            self.assertEqual(str(self.ad_empty), "Northcote, City of Darebin, Victoria 3070, Australia")
+        self.assertEqual(str(self.ad1), "1 Some Street, Melbourne, Victoria 3000, Australia")
+        self.assertEqual(str(self.ad_empty), "Northcote, Victoria 3070, Australia")
 
 
 class AddressFieldTestCase(TestCase):

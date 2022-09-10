@@ -246,7 +246,7 @@ class Locality(models.Model):
         parts = []
         if self.name:
             parts.append(self.name)
-        if self.municipality and self.municipality.name:
+        if getattr(settings, 'ADDRESS_PRINT_MUNICIPALITY', False) and self.municipality and self.municipality.name:
             parts.append(self.municipality.name)
         if self.state:
             if self.postal_code:
